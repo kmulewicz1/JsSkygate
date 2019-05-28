@@ -134,7 +134,7 @@ else
 
 function Wikidescription(arg)
 {	
-	console.log(arrTrueFalse);
+
 	 if(!arrTrueFalse[arg.id])
 			  {
 	let apiUrl="https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&format=json&formatversion=2&exintro=&titles=cityname";
