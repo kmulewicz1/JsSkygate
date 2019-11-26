@@ -1,6 +1,5 @@
 body{
 	background-color: #666699;
-	
 }
 
 #divOutOfMyInput
@@ -19,7 +18,7 @@ body{
 	text-align:center;
 }
 #myInput{
-	color: ;
+	color: dimgrey;
 	radius: 15%; 
 	background-color: #c2c2d6;
 	font-size:40px;
