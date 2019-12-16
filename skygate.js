@@ -4,11 +4,12 @@ mapCountries.set('poland', 'PL');
 mapCountries.set('germany', 'DE');
 mapCountries.set('spain', 'ES');
 mapCountries.set('france', 'FR');
+let arrBooleanCountries=[false,false,false,false,false,false,false,false,false,false,];
+
 
 document.getElementById("myInput").value=sessionStorage.getItem('key1');
 
-function checkPatternInConutries(pattern,arr)
-{
+function checkPatternInConutries(pattern,arr) {
 	for(let i=0; i<arr.length;i++)
 	{
 		if (arr[i].substr(0, pattern.length).toUpperCase() === pattern.toUpperCase())
@@ -17,9 +18,6 @@ function checkPatternInConutries(pattern,arr)
 }
 return false;
 }
-
-let arrBooleanCountries=[false,false,false,false,false,false,false,false,false,false,];
-
 
 function addCities(val, tmp,arr,divToJoin,i) {
 	if (val.length!==0&&arr[i].substr(0, val.length).toUpperCase() === val.toUpperCase()){
@@ -37,7 +35,6 @@ function addCities(val, tmp,arr,divToJoin,i) {
 }
 
 function autocomplete(arg, arr) {
-
 	let divToJoin=document.getElementById("divToJoin");
 	arg.addEventListener("input", function(e) {
 	deleteAutocomplete();
@@ -62,8 +59,7 @@ function deleteAutocomplete() {
 		}
 }
 
-function deleteCities()
-{
+function deleteCities() {
 	const NodeForChild=document.getElementById("divPollutedCity");
 	while (!(NodeForChild.lastChild===NodeForChild.firstChild)) {
 		NodeForChild.removeChild(NodeForChild.lastChild);
@@ -71,57 +67,60 @@ function deleteCities()
 }
 
 
-function polluteCities() {
-
+function polluteCitiesApi() {
 	const tmpValue=document.getElementById("myInput").value;
-
 	if(tmpValue.length===0){
 		alert("Please insert name of Country!");
 }
 	else {
-
-	    let TextIndivPollutedCity=document.getElementById("TextIndivPollutedCity");
-		TextIndivPollutedCity.innerHTML="The most pollutest cities:";
-		TextIndivPollutedCity.style.fontSize="40px"
-		deleteCities();
+        let TextIndivPollutedCity=document.getElementById("TextIndivPollutedCity");
+        TextIndivPollutedCity.innerHTML="The most pollutest cities:";
+        TextIndivPollutedCity.style.fontSize="40px"
+        deleteCities();
         let apiUrl="https://api.openaq.org/v1/latest?country=codecountry&order_by=measurements[0].value&sort=desc&parameter=pm25&&limit=50";
         apiUrl= apiUrl.replace("codecountry", mapCountries.get(tmpValue.toLowerCase()));
-        const divPollutedCity=document.getElementById("divPollutedCity");
+
         let request = new XMLHttpRequest();
         request.open('GET', apiUrl, true);
         request.send();
         request.onload=function (){
-		
-		let data = JSON.parse(this.response);
-		let myArr;
-		
-		  if (request.status === 200)
-		  {
-			   for(let i=0; i<10; i++) {
-				   myArr[i]=data.results[i].city;
-			   }
-			  
-			  for(let i=0; i<10; i++)
-			  {
-				 let tmp=document.createElement('DIV');
-				 tmp.innerHTML=myArr[i];
-				 tmp.className="city";
-				 tmp.id = i;
-				 tmp.style.borderRadius="10%";
-				 tmp.style.border="4px solid black";
-				 tmp.style.backgroundColor="#5c0099";
-				 tmp.style.margin="2px";
-				 tmp.style.textAlign="center";
-				 tmp.addEventListener("click", function (){
-					 Wikidescription(this);	 
-				 });
-				 divPollutedCity.appendChild(tmp);
-			  }
-		  }
-	}
+
+        let data = JSON.parse(this.response);
+
+
+          if (request.status === 200)
+          {
+              addCityToDiv(data)
+              }
+
+        }
 	}
 }
 
+    function addCityToDiv(data) {
+        const divPollutedCity=document.getElementById("divPollutedCity");
+        let myArr ;
+        for(let i=0; i<10; i++) {
+            myArr[i]=data.results[i].city;
+        }
+
+        for(let i=0; i<10; i++)
+        {
+            let tmp=document.createElement('DIV');
+            tmp.innerHTML=myArr[i];
+            tmp.className="city";
+            tmp.id = i;
+            tmp.style.borderRadius="10%";
+            tmp.style.border="4px solid black";
+            tmp.style.backgroundColor="#5c0099";
+            tmp.style.margin="2px";
+            tmp.style.textAlign="center";
+            tmp.addEventListener("click", function (){
+                Wikidescription(this);
+            });
+            divPollutedCity.appendChild(tmp);
+        }
+    }
 
 function Wikidescription(arg) {
 
@@ -134,7 +133,6 @@ function Wikidescription(arg) {
             request.send();
             request.onload=function (){
             let data = JSON.parse(this.response);
-
               if (request.status === 200) {
                       arrBooleanCountries[arg.id]=true;
                       let tmp=document.createElement('DIV');
@@ -155,8 +153,6 @@ function Wikidescription(arg) {
              }
 }
 
-
-
 function validate(evt) {
     let key = evt.keyCode;
     key = String.fromCharCode(key);
@@ -167,12 +163,10 @@ function validate(evt) {
   }
 }
 
-
 function saveIt() {
     sessionStorage.clear();
     sessionStorage.setItem('key1',document.getElementById("myInput").value)
 }
-
 
 autocomplete(document.getElementById("myInput"), countries);
 
