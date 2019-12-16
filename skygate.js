@@ -86,8 +86,6 @@ function polluteCitiesApi() {
         request.onload=function (){
 
         let data = JSON.parse(this.response);
-
-
           if (request.status === 200)
           {
               addCityToDiv(data)
@@ -99,7 +97,7 @@ function polluteCitiesApi() {
 
     function addCityToDiv(data) {
         const divPollutedCity=document.getElementById("divPollutedCity");
-        let myArr ;
+        let myArr = [];
         for(let i=0; i<10; i++) {
             myArr[i]=data.results[i].city;
         }
